@@ -37,9 +37,11 @@ class RegController extends Controller
         }
         array_pop($data);
         $data['reg_time']=time();
-        //$data['password']=password_hash($data['password'],PASSWORD_DEFAULT);
+        $options=[
+            'cost'=>12,
+        ];
+        $data['password']=password_hash($data['password'],PASSWORD_BCRYPT,$options);
         $res=Users::insert($data);
-       // dd($res);
         if($res){
             return redirect('admin/login');
         }

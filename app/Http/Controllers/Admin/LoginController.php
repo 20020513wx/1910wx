@@ -26,14 +26,19 @@ class LoginController extends Controller
             return redirect('admin/login')->withErrors($validator)->withInput();
         }
         $where=[
-            ["user_name","=",$data['user_name']],
-            ["password","=",$data['password']]
+            ["user_name","=",$data['user_name']]
         ];
         $res=Users::where($where)->first();
-        if($res){
+        $yz=password_verify($data['password'],$res['password']);
+        if(!$yz){
+            return redirect('admin/login')->with("pwd","密码错误，请重新登陆");
+        }
+        if($res==true){
             return redirect('/');
         }else{
-            return redirect('admin/login')->with("cuowu","密码错误，请重新登陆");
+            return redirect('admin/login')->with("pwds","账号有误");
         }
+
+
     }
 }
