@@ -4,6 +4,6 @@
 
     邮箱<input type="text" name="email"><font color="red">{{$errors->first('email')}}</font><br>
     密码<input type="text" name="password"><font color="red">{{$errors->first('password')}}</font><br>
-    确认密码<input type="text" name="pwds"><font color="red">{{$errors->first('pwds')}}{{session("a")}}</font><br>
+    确认密码<input type="text" name="pwds"><font color="red">{{$errors->first('pwds')}}{{session("pwd1")}}</font><br>
     <input type="submit" value="点击注册"><button><a href="{{url('admin/login')}}">登录</a></button>
 </form>

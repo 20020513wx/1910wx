@@ -34,11 +34,21 @@ class LoginController extends Controller
             return redirect('admin/login')->with("pwd","密码错误，请重新登陆");
         }
         if($res==true){
-            return redirect('/');
+            $wheres=[
+                ["user_id","=",$res['user_id']]
+            ];
+            $time=time();
+            Users::where($wheres)->update(['login_time'=>$time]);
+            session(['user_id'=>$res['user_id']]);
+            return redirect('admin/index');
         }else{
             return redirect('admin/login')->with("pwds","账号有误");
         }
 
 
+    }
+    public function test(){
+        $ss=session('user_id');
+        dd($ss);
     }
 }

@@ -33,7 +33,7 @@ class RegController extends Controller
             return redirect('/')->withErrors($validator)->withInput();
         }
         if($data['pwds']!=$data['password']){
-            return redirect('/')->with("a","确认密码和密码不一致");
+            return redirect('/')->with("pwd1","确认密码和密码不一致");
         }
         array_pop($data);
         $data['reg_time']=time();
