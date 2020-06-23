@@ -24,4 +24,9 @@ Route::prefix("/admin")->middleware("isLogin")->group(function(){
     //个人中心
     Route::get('user/index','Admin\UserController@index');
 });
+
+//测试控制器
+Route::get('test/test','Admin\TestController@test');
+
+//测试
 Route::get('test','Admin\LoginController@test');
