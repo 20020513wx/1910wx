@@ -32,6 +32,7 @@ class RegController extends Controller
         if($validator->fails()){
             return redirect('/')->withErrors($validator)->withInput();
         }
+
         if($data['pwds']!=$data['password']){
             return redirect('/')->with("pwd1","确认密码和密码不一致");
         }

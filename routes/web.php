@@ -30,3 +30,7 @@ Route::get('test/test','Admin\TestController@test');
 
 //测试
 Route::get('test','Admin\LoginController@test');
+
+Route::post('/api/user/reg','Api\UserController@reg'); //aip注册
+Route::post('/api/user/login','Api\UserController@login');
+Route::get('/api/user/index','Api\UserController@index');
