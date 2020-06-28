@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Users;
 use App\Tokens;
+use Illuminate\Support\Facades\Redis;
 class UserController extends Controller
 {
     /**
@@ -49,7 +50,7 @@ class UserController extends Controller
             'reg_time' =>time(),
         ];
 
-        $res = UserModel::insert($data);
+        $res = Users::insert($data);
         if($res){
             $response = [
                 'error' =>0,
@@ -78,13 +79,12 @@ class UserController extends Controller
             //生成token
             $str=$res->user_id.$res->username.time();
             $token=substr(md5($str),10,16).substr(md5($str),0,10);
-            //echo $token;
-            //保存token
-            $data=[
-                'uid'=>$res->user_id,
-                'token'=>$token
-            ];
-            Tokens::insert($data);
+
+            //将token保存在redis中
+            Redis::set($token,$res->user_id);
+            //设置key的过期时间x
+            //Redis::expire($token,20);
+
             $response=[
                 'errno'=>0,
                 'msg'=>'ok',
@@ -101,19 +101,55 @@ class UserController extends Controller
     }
 
     //用户信息视图
-    public function index(){
-        $token=$_GET['token'];
-        //检查token是否有效
-        $res=Tokens::where(['token'=>$token])->first();
-        if($res){
+    public function index(Request $request){
+        $token=$request->input('token');
+        $uid=Redis::get($token);
+        if($uid){
             //已登录
-            $uid=$res->uid;
             $userInfo=Users::find($uid);
 
             echo $userInfo->user_name."欢迎来到个人中心";
         }else{
             //未登录
-            echo "请先登录";
+            $response=[
+                'errno'=>50008,
+                'msg'=>'请先登录'
+            ];
+            return $response;
         }
+    }
+
+    //订单
+    public function orders(){
+        //订单信息
+        $arr=[
+            '67897690087608976761',
+            '67897690087608976762',
+            '67897690087608976723',
+            '67897690087608976724',
+        ];
+        $response=[
+            'errno'=>0,
+            'msg'=>'ok',
+            'data'=>[
+                'orders'=>$arr
+            ]
+        ];
+        return $response;
+    }
+
+    public function cart(){
+
+        $goods=[
+            123,
+            456,
+            789
+        ];
+        $response=[
+            'errno'=>0,
+            'msg'=>'ok',
+            'data'=>$goods
+        ];
+        return $response;
     }
 }

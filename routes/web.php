@@ -33,4 +33,6 @@ Route::get('test','Admin\LoginController@test');
 
 Route::post('/api/user/reg','Api\UserController@reg'); //aip注册
 Route::post('/api/user/login','Api\UserController@login');
-Route::get('/api/user/index','Api\UserController@index');
+Route::get('/api/user/index','Api\UserController@index')->middleware('check.pri');
+Route::get('/api/my/orders','Api\UserController@orders')->middleware('check.pri');
+Route::get('/api/my/cart','Api\UserController@cart')->middleware('check.pri');
